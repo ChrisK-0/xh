@@ -151,7 +151,7 @@ pub fn translate(args: Cli) -> Result<Command> {
         Verify::CustomCaBundle(filename) => {
             cmd.push("--cacert");
             // TODO: maybe filename should be as bytes?
-            // (does the way we have structopt set up even accept non-unicode?)
+            // (does the way we have clap set up even accept non-unicode?)
             cmd.push(filename.to_string_lossy());
         }
         Verify::No => {
@@ -483,7 +483,7 @@ mod tests {
             ),
         ];
         for (input, output_unix, output_windows) in expected {
-            let cli = Cli::from_iter_safe(input.split_whitespace()).unwrap();
+            let cli = Cli::try_parse_from(input.split_whitespace()).unwrap();
             let cmd = translate(cli).unwrap();
             assert_eq!(
                 cmd.to_string(),
